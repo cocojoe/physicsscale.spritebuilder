@@ -19,6 +19,7 @@
 
 - (void)didLoadFromCCB {
     _physicsNode.debugDraw = YES;
+    _physicsNode.collisionDelegate = self;
 }
 
 - (void)scaleUp {
@@ -27,6 +28,16 @@
 
 - (void)scaleDown {
     [self scaleBox:-SCALE_MODIFIER];
+}
+
+- (void)reset {
+    [[CCDirector sharedDirector] replaceScene:[CCBReader loadAsScene:@"MainScene"]];
+}
+
+- (void) add {
+    CCNode* newBox = [CCBReader load:@"physicsbox"];
+    newBox.position = _box.position;
+    [_physicsNode addChild:newBox];
 }
 
 - (void)scaleBox:(float)scale {
@@ -44,6 +55,11 @@
         
     }
 
+}
+
+- (BOOL)ccPhysicsCollisionBegin:(CCPhysicsCollisionPair *)pair smallbox:(CCNode *)block bigbox:(CCNode *)item {
+    CCLOG(@"Collision!");
+    return YES;
 }
 
 @end
